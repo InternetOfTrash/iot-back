@@ -49,6 +49,21 @@ namespace iot_backend
                 }
             }
         }
+
+        public List<ContainerLevel> GetFillLevels()
+        {
+            List<ContainerLevel> cLevelList = new List<ContainerLevel>();
+            Dictionary<int, int> dictionary = null;
+            using (var transaction = engine.GetTransaction())
+            {
+                dictionary = transaction.SelectDictionary<int,int>("containers");
+            }
+            foreach(KeyValuePair<int,int> pair in dictionary)
+            {
+                cLevelList.Add(new ContainerLevel(pair.Key, pair.Value));
+            }
+            return cLevelList;
+        }
         private Service()
         {
             InitDB();

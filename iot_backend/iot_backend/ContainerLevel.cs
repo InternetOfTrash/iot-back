@@ -11,5 +11,11 @@ namespace iot_backend
         public int ID { get; set; }
         public int FillLevel { get; set; }
 
+        public ContainerLevel(int ID, int fillLevel)
+        {
+            this.ID = ID;
+            this.FillLevel = fillLevel;
+        }
+
     }
 }

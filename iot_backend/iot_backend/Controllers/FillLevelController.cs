@@ -1,27 +1,28 @@
-﻿using System.Net;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
 namespace iot_backend.Controllers
 {
-    [RoutePrefix("api/filllevel/{id}")]
+    [RoutePrefix("containers/filllevel/{id}")]
     public class FillLevelController : ApiController
     {
 
-
-
         /// <summary>
-        /// Initializes a new session and returns the session ID.
+        /// Returns the fill level of the specified ID
         /// </summary>
-        /// <remarks>Get a session ID, This method is called everytime a new analysation starts.</remarks>
-        /// <returns>Session ID</returns>
-        public int Get(string id)
+        /// <remarks>Get the fill level of a specific ID.</remarks>
+        /// <param name="id">Specify the ID of the container in order to retrieve the fill level</param>
+        /// <returns>Fill Level</returns>
+        public ContainerLevel Get(string id)
         {
             int result;
             bool parseSuccess = int.TryParse(id, out result);
             if (parseSuccess && result < int.MaxValue && result > 0)
             {
-                return Service.GetInstance().GetFillLevel(result);
+                return new ContainerLevel(result,Service.GetInstance().GetFillLevel(result));
             }
             else
             {
@@ -32,29 +33,39 @@ namespace iot_backend.Controllers
 
 
                 // BadRequest("You have entered an invalid ID");
-               // invalid entry
+                // invalid entry
             }
+
 
         }
 
+        /// <summary>
+        /// Returns a list of all the containers and its fill levels
+        /// </summary>
+        /// <returns>List of ContainerLevel, contains ID's and corresponding fill levels</returns>
+        public List<ContainerLevel> Get()
+        {
+            return Service.GetInstance().GetFillLevels();
+        }
 
         /// <summary>
-        /// Finalises the session, creates the heatmap and transfers it to the client.
+        /// Adds or changes a ContainerLevel object which consists of an ID and a fill level
         /// </summary>
-        /// <remarks>This terminated the session. This post method will disable the possibility to post new coordinates for this session id.</remarks>
-        /// <param name="session">Session Id to be terminated</param>
-        public void Post([FromBody]ContainerLevel cl)
+        /// <param name="cl">ContainerLevel to update, consisting of an ID(int) and FillLevel(int)</param>
+        public IHttpActionResult Post([FromBody]ContainerLevel cl)
         {
+            Console.WriteLine("IN POST");
             if (cl != null)
             {
+                Console.WriteLine("CL NOT NULL");
                 if (ModelState.IsValid)
                 {
+                    Console.WriteLine("Post made: " + cl.ID.ToString() + " level: " + cl.FillLevel.ToString());
                     Service.GetInstance().SetFillLevel(cl);
-                }else
-                {
-                     
+                    return Ok();
                 }
             }
+            return BadRequest(ModelState);
         }
     }
 }
