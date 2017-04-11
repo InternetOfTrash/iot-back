@@ -33,11 +33,10 @@ namespace iot_backend.Controllers
         /// <returns>Fill Level</returns>
         public ContainerLevel Get(string id)
         {
-            int result;
-            bool parseSuccess = int.TryParse(id, out result);
-            if (parseSuccess && result < int.MaxValue && result > 0)
+           
+            if (id.Length > 0)
             {
-                return new ContainerLevel(result, service.GetFillLevel(result));
+                return new ContainerLevel(id, service.GetFillLevel(id));
             }
             else
             {
@@ -108,8 +107,9 @@ namespace iot_backend.Controllers
                     Console.WriteLine("JSONBODY NOT NULL");
                     if (ModelState.IsValid)
                     {
-                        Console.WriteLine("[Post] LED ON: " + jsonBody.payload_fields.led.ToString());
-                        //service.SetFillLevel(cl);
+                        ContainerLevel cl = new ContainerLevel(jsonBody.dev_id, jsonBody.payload_fields.fill_level);
+                        Console.WriteLine("[Post] ID: " + cl.ID.ToString() + " level: " + cl.FillLevel.ToString());
+                        service.SetFillLevel(cl);
                         return Ok();
                     }
                     else
