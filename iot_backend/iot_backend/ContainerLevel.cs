@@ -8,10 +8,10 @@ namespace iot_backend
 {
     public class ContainerLevel
     {
-        public int ID { get; set; }
+        public string ID { get; set; }
         public int FillLevel { get; set; }
 
-        public ContainerLevel(int ID, int fillLevel)
+        public ContainerLevel(string ID, int fillLevel)
         {
             this.ID = ID;
             this.FillLevel = fillLevel;

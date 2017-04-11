@@ -41,18 +41,18 @@ namespace iot_backend
             }
             using (var tran = engine.GetTransaction())
             {
-                tran.Insert<int, int>("containers", cl.ID, cl.FillLevel);
+                tran.Insert<string, int>("containers", cl.ID, cl.FillLevel);
                 
                 tran.Commit();
             }
 
         }
 
-        public int GetFillLevel(int id)
+        public int GetFillLevel(string id)
         {
             using (var transaction = engine.GetTransaction())
             {
-                var row = transaction.Select<int, int>("containers", id);
+                var row = transaction.Select<string, int>("containers", id);
                 int res;
                 if (row.Exists)
                 {
@@ -69,12 +69,12 @@ namespace iot_backend
         public List<ContainerLevel> GetFillLevels()
         {
             List<ContainerLevel> cLevelList = new List<ContainerLevel>();
-            Dictionary<int, int> dictionary = null;
+            Dictionary<string, int> dictionary = null;
             using (var transaction = engine.GetTransaction())
             {
-                dictionary = transaction.SelectDictionary<int,int>("containers");
+                dictionary = transaction.SelectDictionary<string,int>("containers");
             }
-            foreach(KeyValuePair<int,int> pair in dictionary)
+            foreach(KeyValuePair<string,int> pair in dictionary)
             {
                 cLevelList.Add(new ContainerLevel(pair.Key, pair.Value));
             }

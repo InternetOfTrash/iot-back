@@ -23,11 +23,11 @@ namespace iot_backend.Controllers.Tests
         private List<ContainerLevel> GetTestLevels()
         {
             var clList = new List<ContainerLevel>();
-            clList.Add(new ContainerLevel(1, 10));
-            clList.Add(new ContainerLevel(2, 20));
-            clList.Add(new ContainerLevel(3, 30));
-            clList.Add(new ContainerLevel(4, 40));
-            clList.Add(new ContainerLevel(5, 50));
+            clList.Add(new ContainerLevel("1", 10));
+            clList.Add(new ContainerLevel("2", 20));
+            clList.Add(new ContainerLevel("3", 30));
+            clList.Add(new ContainerLevel("4", 40));
+            clList.Add(new ContainerLevel("5", 50));
             return clList;
         }
 

@@ -2,6 +2,6 @@
 {
     public class PayloadFields
     {
-        public bool led = false;
+        public int fill_level = -1;
     }
 }
