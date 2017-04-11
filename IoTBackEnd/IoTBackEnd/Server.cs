@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace iot_backend
+namespace IoTBackEnd
 {
     public class Server
     {

@@ -5,7 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 
-namespace iot_backend.Controllers
+namespace IoTBackEnd.Controllers
 {
     [RoutePrefix("containers/filllevel/{id}")]
     public class FillLevelController : ApiController
@@ -20,7 +20,7 @@ namespace iot_backend.Controllers
 
         public FillLevelController(List<ContainerLevel> levels)
         {
-            foreach(ContainerLevel level in levels)
+            foreach (ContainerLevel level in levels)
             {
                 service.SetFillLevel(level);
             }
@@ -62,7 +62,7 @@ namespace iot_backend.Controllers
         {
             return service.GetFillLevels();
         }
-        /*
+
         /// <summary>
         /// Adds or changes a ContainerLevel object which consists of an ID and a fill level
         /// </summary>
@@ -71,45 +71,14 @@ namespace iot_backend.Controllers
         {
             try
             {
-                 Console.WriteLine("IN POST");
+                // Console.WriteLine("IN POST");
                 if (cl != null)
                 {
-                     Console.WriteLine("CL NOT NULL");
+                    // Console.WriteLine("CL NOT NULL");
                     if (ModelState.IsValid)
                     {
-                        Console.WriteLine("[Post] ID: " + cl.ID.ToString() + " level: " + cl.FillLevel.ToString());
+                        //Console.WriteLine("[Post] ID: " + cl.ID.ToString() + " level: " + cl.FillLevel.ToString());
                         service.SetFillLevel(cl);
-                        return Ok();
-                    }
-                    else
-                    {
-                        return BadRequest(ModelState);
-                    }
-                }
-                return BadRequest(ModelState);
-            }
-            catch (Exception e)
-            {
-                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Unfortunate son..."));
-            }
-        }
-        */
-        /// <summary>
-        /// Adds or changes a ContainerLevel object which consists of an ID and a fill level which can be retrieved from the json found as a parameter
-        /// </summary>
-        /// <param name="jsonBody">body containing json, retrieved from a incomming post request.</param>
-        public IHttpActionResult Post([FromBody]JSONBody jsonBody)
-        {
-            try
-            {
-                Console.WriteLine("IN 2ND POST");
-                if (jsonBody != null)
-                {
-                    Console.WriteLine("JSONBODY NOT NULL");
-                    if (ModelState.IsValid)
-                    {
-                        Console.WriteLine("[Post] LED ON: " + jsonBody.payload_fields.led.ToString());
-                        //service.SetFillLevel(cl);
                         return Ok();
                     }
                     else

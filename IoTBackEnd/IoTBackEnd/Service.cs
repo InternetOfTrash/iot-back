@@ -7,29 +7,16 @@ using DBreeze;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace iot_backend
+namespace IoTBackEnd
 {
     class Service : IDisposable
     {
         private static Service service = null;
         DBreezeEngine engine = null;
-        protected static IMongoClient _client;
-        protected static IMongoDatabase _database;
-        protected IMongoCollection<BsonDocument> collection;
         private async void InitDB()
         {
             if (engine == null)
                 engine = new DBreezeEngine(@"/DBR1");
-
-            ////_client = new MongoClient("mongodb://<dbuser>:<dbpassword>@ds137730.mlab.com:37730");
-            ////_database = _client.GetDatabase("internet_of_trash");
-            ////collection = _database.GetCollection<BsonDocument>("filllevels");
-            ////var document = new BsonDocument
-            ////{
-            ////    { "_id", "1" },
-            ////    { "filllevel", "55" }
-            ////};
-            ////collection.insert(document);
 
         }
 
@@ -42,7 +29,7 @@ namespace iot_backend
             using (var tran = engine.GetTransaction())
             {
                 tran.Insert<int, int>("containers", cl.ID, cl.FillLevel);
-                
+
                 tran.Commit();
             }
 
@@ -72,9 +59,9 @@ namespace iot_backend
             Dictionary<int, int> dictionary = null;
             using (var transaction = engine.GetTransaction())
             {
-                dictionary = transaction.SelectDictionary<int,int>("containers");
+                dictionary = transaction.SelectDictionary<int, int>("containers");
             }
-            foreach(KeyValuePair<int,int> pair in dictionary)
+            foreach (KeyValuePair<int, int> pair in dictionary)
             {
                 cLevelList.Add(new ContainerLevel(pair.Key, pair.Value));
             }
@@ -104,7 +91,7 @@ namespace iot_backend
         {
             using (var tran = engine.GetTransaction())
             {
-                tran.RemoveAllKeys("containers",true);
+                tran.RemoveAllKeys("containers", true);
                 tran.Commit();
             }
         }

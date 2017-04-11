@@ -1,11 +1,11 @@
-using System.Web.Http;
+﻿using System.Web.Http;
 using WebActivatorEx;
-using iot_backend;
+using IoTBackEnd;
 using Swashbuckle.Application;
 
 [assembly: PreApplicationStartMethod(typeof(SwaggerConfig), "Register")]
 
-namespace iot_backend
+namespace IoTBackEnd
 {
     public class SwaggerConfig
     {
@@ -246,3 +246,4 @@ namespace iot_backend
         }
     }
 }
+
