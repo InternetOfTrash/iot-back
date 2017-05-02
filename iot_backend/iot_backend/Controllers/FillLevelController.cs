@@ -18,13 +18,6 @@ namespace iot_backend.Controllers
 
         }
 
-        public FillLevelController(List<ContainerLevel> levels)
-        {
-            foreach(ContainerLevel level in levels)
-            {
-                service.SetFillLevel(level);
-            }
-        }
         /// <summary>
         /// Returns the fill level of the specified ID
         /// </summary>
@@ -52,6 +45,9 @@ namespace iot_backend.Controllers
 
 
         }
+
+        
+
 
         /// <summary>
         /// Returns a list of all the containers and its fill levels
@@ -119,7 +115,7 @@ namespace iot_backend.Controllers
                 }
                 return BadRequest(ModelState);
             }
-            catch (Exception e)
+            catch (ArgumentException e)
             {
                 return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Unfortunate son..."));
             }
