@@ -10,16 +10,10 @@ namespace iot_backend
     {
         public static void Main()
         {
-            //Console.WriteLine(ReverseGeo.GetAddressFromCoords("51.363741", "6.159683"));
-            Server servor = new Server();
-            // Service s = new iot_backend.Service();
+            Server server = new Server();
             Service s = Service.GetInstance();
-//s.SetFillLevel(1, 10);
-           // Console.WriteLine("The fill level of container 1 is: " + s.GetFillLevel(1));
-
             while (true)
             {
-
             }
         }
     }

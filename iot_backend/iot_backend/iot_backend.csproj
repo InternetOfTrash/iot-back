@@ -142,26 +142,27 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiKeyHandler.cs" />
+    <Compile Include="Core\ApiKeyHandler.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
-    <Compile Include="Container.cs" />
-    <Compile Include="ContainerLevel.cs" />
+    <Compile Include="Entities\Container.cs" />
+    <Compile Include="Entities\ContainerLevel.cs" />
     <Compile Include="Controllers\ContainerController.cs" />
     <Compile Include="Controllers\FillLevelController.cs" />
     <Compile Include="Controllers\HistoryController.cs" />
     <Compile Include="Controllers\UsergroupController.cs" />
-    <Compile Include="Entry.cs" />
-    <Compile Include="Gateways.cs" />
-    <Compile Include="JSONBody.cs" />
-    <Compile Include="MailClient.cs" />
-    <Compile Include="MainClass.cs" />
-    <Compile Include="MetaData.cs" />
-    <Compile Include="PayloadFields.cs" />
-    <Compile Include="ReverseGeo.cs" />
-    <Compile Include="Server.cs" />
-    <Compile Include="Service.cs" />
-    <Compile Include="Startup.cs" />
+    <Compile Include="Entities\Entry.cs" />
+    <Compile Include="Entities\Gateways.cs" />
+    <Compile Include="Entities\JSONBody.cs" />
+    <Compile Include="HelperClasses\MailClient.cs" />
+    <Compile Include="Core\MainClass.cs" />
+    <Compile Include="Entities\MetaData.cs" />
+    <Compile Include="Entities\PayloadFields.cs" />
+    <Compile Include="HelperClasses\ReverseGeo.cs" />
+    <Compile Include="Core\Server.cs" />
+    <Compile Include="Core\Service.cs" />
+    <Compile Include="Core\Startup.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
