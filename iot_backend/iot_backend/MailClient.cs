@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Net.Mail;
 using System.Net;
 
-namespace iot_backend.Mail
+namespace iot_backend
 {
     public class MailClient
     {
