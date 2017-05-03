@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Mail;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace iot_backend
 {
@@ -19,8 +20,6 @@ namespace iot_backend
         {
             sendGMailtoList("internetoftrash@gmail.com", "raspberry12", destAdresslist, mailSubject, mailBody);
         }
-
-
 
         //private method exists for security reasons, please call it's public equivalent instead.
         private void sendGMail(string sendAdress, string sendPwd, string destAdress, string mailSubject, string mailBody)
@@ -49,6 +48,14 @@ namespace iot_backend
             {
                 client.Send(sendAdress, dest, mailSubject, mailBody);
             }
+        }
+
+        public bool isValidEmail(string email)
+        {
+            string validEmailPattern = @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
+                @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$";
+            Regex regex = new Regex(validEmailPattern,RegexOptions.IgnoreCase);
+            return regex.IsMatch(email);
         }
     }
 }
