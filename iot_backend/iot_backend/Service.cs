@@ -181,7 +181,15 @@ namespace iot_backend
         {
             
             var x = GetUserGroup(ID); //insert into m.Schats code
-            mailClient.sendMailToList(x, "Container " + ID + " is Full!", "Container " + ID + " is Full!");
+            Container con = GetContainer(ID);
+            string lat = con.Latitude.ToString();
+            string longi = con.Longitude.ToString();
+            string message = "Container at " + ReverseGeo.GetInstance().GetAddressFromCoords(lat, longi);
+            if (message.Length == 0)
+            {
+                message = "A container you subscribed to";
+            }
+            mailClient.sendMailToList(x, message + " is Full!", message + " is Full!");
             SetSent(ID, true);
         }
 

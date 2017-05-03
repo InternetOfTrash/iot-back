@@ -10,6 +10,7 @@ namespace iot_backend
     {
         public static void Main()
         {
+            //Console.WriteLine(ReverseGeo.GetAddressFromCoords("51.363741", "6.159683"));
             Server servor = new Server();
             // Service s = new iot_backend.Service();
             Service s = Service.GetInstance();
