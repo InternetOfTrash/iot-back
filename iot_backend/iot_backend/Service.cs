@@ -15,12 +15,15 @@ namespace iot_backend
     {
         private static Service service = null;
         DBreezeEngine engine = null;
+        MailClient mailClient = null;
 
         private async void InitDB()
         {
             if (engine == null)
                 engine = new DBreezeEngine(@"/DBR1");
 
+            if (mailClient == null)
+                mailClient = new MailClient();
             //using (var tran = engine.GetTransaction())
             //{
             //    Container container1 = new Container("prototype_container1", (float)51.353351, (float)6.153967);
@@ -46,6 +49,52 @@ namespace iot_backend
             //    tran.Insert<string, DbXML<Container>>("containers", container10.ID, container10);
             //    tran.Commit();
             //}
+        }
+
+        internal void SubscribeToUsergroup(string id, string email)
+        {
+            List<string> usergroup;
+            using (var tran = engine.GetTransaction())
+            {
+                var rows = tran.Select<string, DbXML<List<string>>>("usergroups", id);
+                if (rows.Exists)
+                {
+                    usergroup = rows.Value.Get;
+                }
+                else
+                {
+                    usergroup = new List<string>();
+                }
+                usergroup.Add(email);
+                tran.Insert<string, DbXML<List<string>>>("usergroups", id, usergroup);
+
+                tran.Commit();
+            }
+
+
+        }
+
+        private bool GetSent(string id)
+        {
+            using (var tran = engine.GetTransaction())
+            {
+                var rows = tran.Select<string, bool>("mailSent", id);
+                if (rows.Exists)
+                {
+                    return rows.Value;
+                }else
+                {
+                    return false;
+                }
+            }
+        }
+        private void SetSent(string id, bool sent)
+        {
+            using (var tran = engine.GetTransaction())
+            {
+                tran.Insert<string, bool>("mailSent", id, sent);
+                tran.Commit();
+            }
         }
 
         public List<Entry> GetHistory(string id)
@@ -114,6 +163,44 @@ namespace iot_backend
                 }
             }
 
+            bool isSent = GetSent(ID);
+   
+            if (cl.FillLevel > 80 && !isSent)
+            {
+                //send mail
+                SendMail(ID);
+            }
+            if(cl.FillLevel < 80 && isSent)
+            {
+                SetSent(ID, false);
+            }
+            
+        }
+
+        private void SendMail(string ID)
+        {
+            
+            var x = GetUserGroup(ID); //insert into m.Schats code
+            mailClient.sendMailToList(x, "Container " + ID + " is Full!", "Container " + ID + " is Full!");
+            SetSent(ID, true);
+        }
+
+        public List<string> GetUserGroup(string id)
+        {
+            using (var transaction = engine.GetTransaction())
+            {
+                var row = transaction.Select<string, DbXML<List<string>>>("usergroups", id);
+                List<string> res;
+                if (row.Exists)
+                {
+                    res = row.Value.Get;
+                    return res;
+                }
+                else
+                {
+                    return new List<string>();
+                }
+            }
         }
 
         public int GetFillLevel(string id)
