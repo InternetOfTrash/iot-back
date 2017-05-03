@@ -7,7 +7,7 @@ using System.Web.Http;
 
 namespace iot_backend.Controllers
 {
-    [RoutePrefix("containers/containers/{id}")]
+    [RoutePrefix("containers/containers")]
     public class ContainerController : ApiController
     {
         private Service service = Service.GetInstance();
@@ -18,6 +18,7 @@ namespace iot_backend.Controllers
 
         }
 
+        [Route("get/{id}")]
         /// <summary>
         /// Returns a container
         /// </summary>
@@ -28,6 +29,7 @@ namespace iot_backend.Controllers
             return service.GetContainer(id);
         }
 
+        [Route("post/")]
         /// <summary>
         /// Adds a new container to the system if id is not existent already
         /// </summary>
@@ -65,7 +67,7 @@ namespace iot_backend.Controllers
             }
         }
 
-        //[Route("nearme/{id}")]
+        [Route("nearme/{lat}/{lng}")]
         /// <summary>
         /// Returns a list of containers near certain coordinate
         /// </summary>
