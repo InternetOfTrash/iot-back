@@ -8,6 +8,7 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using DBreeze.DataTypes;
 using DBreeze.Exceptions;
+using System.Device.Location;
 
 namespace iot_backend
 {
@@ -49,6 +50,42 @@ namespace iot_backend
             //    tran.Insert<string, DbXML<Container>>("containers", container10.ID, container10);
             //    tran.Commit();
             //}
+        }
+
+        internal List<Container> GetContainersNearMe(string lat, string lng)
+        {
+            List<Container> containerList = new List<Container>();
+            var sCoord = new GeoCoordinate(Convert.ToDouble(lat), Convert.ToDouble(lng));
+            using (var transaction = engine.GetTransaction())
+            {
+                Dictionary<string, DbXML<Container>> containers = transaction.SelectDictionary<string, DbXML<Container>>("containers");
+                foreach (KeyValuePair<string, DbXML<Container>> pair in containers)
+                {
+                    Container con = pair.Value.Get;
+                    var eCoord = new GeoCoordinate(con.Latitude, con.Longitude);
+
+                    var distance = sCoord.GetDistanceTo(eCoord);
+                    if (distance < 500)
+                    {
+                        containerList.Add(con);
+                    }
+                }
+            }
+            return containerList;
+        }
+        internal bool AddContainer(string id, float lat, float lng)
+        {
+            if (GetContainer(id) != null)
+                return false;
+
+            using (var tran = engine.GetTransaction())
+            {
+                Container con = new Container(id, lat, lng);
+                tran.Insert<string, DbXML<Container>>("containers", con.ID, con);
+                tran.Commit();
+                return true;
+            }
+            return false;
         }
 
         internal void SubscribeToUsergroup(string id, string email)

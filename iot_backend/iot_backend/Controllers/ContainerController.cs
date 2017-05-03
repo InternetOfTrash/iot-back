@@ -28,6 +28,53 @@ namespace iot_backend.Controllers
             return service.GetContainer(id);
         }
 
+        /// <summary>
+        /// Adds a new container to the system if id is not existent already
+        /// </summary>
+        /// <param name="id">unqiue identiefier for new container.</param>
+        /// <param name="lat">latitude of new container</param>
+        /// <param name="lng">longitude of new container</param>
+        public IHttpActionResult Post(string id, float lat, float lng)
+        {
+            try
+            {
+                
+                if (id.Length != 0)
+                {
+                    
+                    if (ModelState.IsValid)
+                    {
 
+                        bool success = service.AddContainer(id, lat, lng);
+                        if (success)
+                        {
+                            return Ok();
+                        }
+                        
+                    }
+                    else
+                    {
+                        return BadRequest(ModelState);
+                    }
+                }
+                return BadRequest(ModelState);
+            }
+            catch (ArgumentException e)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Unfortunate son..."));
+            }
+        }
+
+        //[Route("nearme/{id}")]
+        /// <summary>
+        /// Returns a list of containers near certain coordinate
+        /// </summary>
+        /// <param name="lat">Specify the latitude of location</param>
+        /// <param name="lng">Specify the longitude of location</param>
+        /// <returns>Containers in area of request</returns>
+        public List<Container> Get(string lat, string lng)
+        {
+            return service.GetContainersNearMe(lat, lng);
+        }
     }
 }
