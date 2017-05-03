@@ -7,7 +7,7 @@ using System.Web.Http;
 
 namespace iot_backend.Controllers
 {
-    [RoutePrefix("containers/containers")]
+    [RoutePrefix("containers")]
     public class ContainerController : ApiController
     {
         private Service service = Service.GetInstance();
