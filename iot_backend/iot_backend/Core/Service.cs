@@ -54,8 +54,8 @@ namespace iot_backend
 
         internal List<Container> GetContainersNearMe(string lat, string lng)
         {
-            lat = lat.Replace(".", ",");
-            lng = lng.Replace(".", ",");
+            lat = lat.Replace(",", ".");
+            lng = lng.Replace(",", ".");
             List<Container> containerList = new List<Container>();
             var sCoord = new GeoCoordinate(Convert.ToDouble(lat), Convert.ToDouble(lng));
             using (var transaction = engine.GetTransaction())
