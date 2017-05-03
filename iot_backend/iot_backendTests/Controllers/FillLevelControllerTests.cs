@@ -41,7 +41,7 @@ namespace iot_backend.Controllers.Tests
         public void GetTest1()
         {
             var testLevels = GetTestLevels();
-            var controller = new FillLevelController(testLevels);
+            var controller = new FillLevelController();
 
             var result = controller.Get() as List<ContainerLevel>;
             Assert.AreEqual(testLevels.Count, result.Count);
