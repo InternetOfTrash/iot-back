@@ -153,6 +153,7 @@
     <Compile Include="Entities\Entry.cs" />
     <Compile Include="Entities\Gateways.cs" />
     <Compile Include="Entities\JSONBody.cs" />
+    <Compile Include="HelperClasses\LevelPredictor.cs" />
     <Compile Include="HelperClasses\MailClient.cs" />
     <Compile Include="Core\MainClass.cs" />
     <Compile Include="Entities\MetaData.cs" />
