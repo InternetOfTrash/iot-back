@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace iot_backend
 {
-    class LevelPredictor
+    public class LevelPredictor
     {
-        public DateTime GetExpectedFillDate(DateTime secondLastDate, int SecondLastLevel, DateTime lastDate, int lastLevel) {   
+        public static DateTime GetExpectedFillDate(DateTime secondLastDate, int SecondLastLevel, DateTime lastDate, int lastLevel) {   
 
             double timeDiff = lastDate.Subtract(secondLastDate).TotalSeconds;   //secondsbetween dates
             double levelDiff = lastLevel - SecondLastLevel;                     //difference in level between measurements
@@ -19,6 +19,14 @@ namespace iot_backend
 
             return expectedFull;
 
+        }
+
+        internal static DateTime GetExpectedFillDate(DateTime lastUpdated, int fillLevel)
+        {
+            DateTime expectedFull = DateTime.Now.AddSeconds(60*60*24*7);       //expected date before container is full
+
+            return expectedFull;
+            //throw new NotImplementedException();
         }
     }
 }
