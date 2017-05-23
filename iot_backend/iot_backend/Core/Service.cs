@@ -27,6 +27,17 @@ namespace iot_backend
                 mailClient = new MailClient();
             //using (var tran = engine.GetTransaction())
             //{
+            //    Dictionary<string, DbXML<Container>> containers = tran.SelectDictionary<string, DbXML<Container>>("containers");
+            //    foreach (KeyValuePair<string, DbXML<Container>> pair in containers)
+            //    {
+            //        Container con = pair.Value.Get;
+            //        con.Prediction = DateTime.Now;
+            //        con.Prediction.AddDays(7);
+            //    }
+
+            //}
+            //using (var tran = engine.GetTransaction())
+            //{
             //    Container container1 = new Container("prototype_container1", (float)51.353351, (float)6.153967);
             //    Container container2 = new Container("prototype_container2", (float)51.359951, (float)6.159428);
             //    Container container3 = new Container("prototype_container3", (float)51.363751, (float)6.159725);
@@ -52,10 +63,48 @@ namespace iot_backend
             //}
         }
 
+        internal List<Container> GetContainerAbovePercentage(int percentage)
+        {
+            List<Container> containerList = new List<Container>();
+            using (var transaction = engine.GetTransaction())
+            {
+
+                Dictionary<string, DbXML<Container>> containers = transaction.SelectDictionary<string, DbXML<Container>>("containers");
+                foreach (KeyValuePair<string, DbXML<Container>> pair in containers)
+                {
+                    Container con = pair.Value.Get;
+                    if(con.FillLevel > percentage)
+                    {
+                        containerList.Add(con);
+                    }
+                    
+                }
+            }
+            return containerList;
+        }
+
+        internal List<Container> GetContainers()
+        {
+            List<Container> containerList = new List<Container>();
+            using (var transaction = engine.GetTransaction())
+            {
+                
+                Dictionary<string, DbXML<Container>> containers = transaction.SelectDictionary<string, DbXML<Container>>("containers");
+                foreach (KeyValuePair<string, DbXML<Container>> pair in containers)
+                {
+                    Container con = pair.Value.Get;
+
+                        containerList.Add(con);
+                    
+                }
+            }
+            return containerList;
+        }
+
         internal List<Container> GetContainersNearMe(string lat, string lng)
         {
-            lat = lat.Replace(",", ".");
-            lng = lng.Replace(",", "..");
+            lat = lat.Replace(".", ",");
+            lng = lng.Replace(".", ",");
             List<Container> containerList = new List<Container>();
             var sCoord = new GeoCoordinate(Convert.ToDouble(lat), Convert.ToDouble(lng));
             using (var transaction = engine.GetTransaction())
