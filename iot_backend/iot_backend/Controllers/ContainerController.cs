@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using iot_backend.Entities;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -17,8 +18,21 @@ namespace iot_backend.Controllers
 
 
         }
+        [Route("")]
+        /// <summary>
+        /// Returns a list of containers near certain coordinate
+        /// </summary>
+        /// <param name="lat">Specify the latitude of location</param>
+        /// <param name="lng">Specify the longitude of location</param>
+        /// <returns>Containers in area of request</returns>
+        public List<Container> Get()
+        {
+            List<Container> list = service.GetContainers();
+            return list;
+            //return service.GetContainersNearMe(lat, lng);
+        }
 
-        [Route("get/{id}")]
+        [Route("{id}")]
         /// <summary>
         /// Returns a container
         /// </summary>
@@ -29,7 +43,18 @@ namespace iot_backend.Controllers
             return service.GetContainer(id);
         }
 
-        [Route("post/")]
+        [Route("getabove/{percentage}")]
+        /// <summary>
+        /// Returns a list of containers with a fillevel above specified percentage
+        /// </summary>
+        ///  /// <param name="percentage">Specify the minimum percentage of the filllevel</param>
+        /// <returns>List of containers with a fillevel above specified percentage</returns>
+        public List<Container> Get(int percentage)
+        {
+            return service.GetContainerAbovePercentage(percentage);
+        }
+
+        [Route("")]
         /// <summary>
         /// Adds a new container to the system if id is not existent already
         /// </summary>
@@ -76,7 +101,44 @@ namespace iot_backend.Controllers
         /// <returns>Containers in area of request</returns>
         public List<Container> Get(string lat, string lng)
         {
-            return service.GetContainersNearMe(lat, lng);
+            List<Container> list = service.GetContainersNearMe(lat, lng);
+            return list;
+            //return service.GetContainersNearMe(lat, lng);
         }
+
+
+        [Route("subscribe")]
+        /// <summary>
+        /// Subscribes an emailaddress to be notified when container is full
+        /// </summary>
+        /// <param name="body">id of the container to be subscribed to and email</param>
+        public IHttpActionResult Post([FromBody]UserGroupJsonBody body)
+        {
+            try
+            {
+                string id = body.ID;
+                string email = body.EMAIL;
+                if (id.Length != 0 && email.Length != 0)
+                {
+
+                    if (ModelState.IsValid)
+                    {
+
+                        service.SubscribeToUsergroup(id, email);
+                        return Ok();
+                    }
+                    else
+                    {
+                        return BadRequest(ModelState);
+                    }
+                }
+                return BadRequest(ModelState);
+            }
+            catch (ArgumentException e)
+            {
+                return ResponseMessage(Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Unfortunate son..."));
+            }
+        }
+
     }
 }

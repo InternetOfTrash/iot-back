@@ -7,7 +7,7 @@ using System.Web.Http;
 
 namespace iot_backend.Controllers
 {
-    [RoutePrefix("containers/filllevel/{id}")]
+    [RoutePrefix("filllevel")]
     public class FillLevelController : ApiController
     {
         private Service service = Service.GetInstance();
@@ -17,7 +17,7 @@ namespace iot_backend.Controllers
 
 
         }
-
+        [Route("{id}")]
         /// <summary>
         /// Returns the fill level of the specified ID
         /// </summary>
@@ -40,7 +40,7 @@ namespace iot_backend.Controllers
             }
 
         }
-
+        [Route("")]
         /// <summary>
         /// Returns a list of all the containers and its fill levels
         /// </summary>
@@ -49,7 +49,7 @@ namespace iot_backend.Controllers
         {
             return service.GetFillLevels();
         }
-        
+        [Route("")]
         /// <summary>
         /// Adds or changes a ContainerLevel object which consists of an ID and a fill level which can be retrieved from the json found as a parameter
         /// </summary>

@@ -11,8 +11,7 @@ namespace iot_backend
 
         public Container()
         {
-            //
-            int i = 0;
+           
         }
 
         public Container(string ID, float latitude, float longitude)
@@ -22,6 +21,8 @@ namespace iot_backend
             this.longitude = longitude;
             this.fillLevel = 0;
             this.lastUpdated = DateTime.Now;
+            this.prediction = DateTime.Now;
+            prediction.AddDays(7);
         }
 
 
@@ -30,7 +31,7 @@ namespace iot_backend
         public int FillLevel
         {
             get { return fillLevel; }
-            set { fillLevel = value; }
+            set { fillLevel = value;}
         }
 
         private string id;
@@ -65,6 +66,30 @@ namespace iot_backend
             set { lastUpdated = value; }
         }
 
-      
+        private DateTime prediction;
+
+        public DateTime Prediction
+        {
+            get {
+                //UpdatePrediction();
+                return prediction; }
+            set { prediction = value; }
+        }
+
+        public void UpdatePrediction()
+        {
+            List<Entry> hist = Service.GetInstance().GetHistory(id);
+            if(hist.Count == 0)
+            {
+                prediction = LevelPredictor.GetExpectedFillDate(LastUpdated, FillLevel);
+            }
+            else
+            {
+                Entry e = hist[hist.Count - 1];
+                prediction = LevelPredictor.GetExpectedFillDate(e.TimeStamp, e.FillLevel, LastUpdated, FillLevel);
+            }
+            
+        }
+
     }
 }
