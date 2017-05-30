@@ -140,5 +140,37 @@ namespace iot_backend.Controllers
             }
         }
 
+        [Route("unsubscribe/{id}/{email}/{dummy}")]
+        /// <summary>
+        /// Subscribes an emailaddress to be notified when container is full
+        /// </summary>
+        /// <param name="body">id of the container to be subscribed to and email</param>
+        public String Get(string id, string email, int dummy)
+        {
+            try
+            {
+
+                if (id.Length != 0 && email.Length != 0)
+                {
+
+                    if (ModelState.IsValid)
+                    {
+
+                        service.UnsubscribeToUsergroup(id, email);
+                        return "Succesfully unsubscribed from container!";
+                    }
+                    else
+                    {
+                        return "Unsubscribing from container failed!";
+                    }
+                }
+                return "Unsubscribing from container failed!";
+            }
+            catch (ArgumentException e)
+            {
+                return "Unsubscribing from container failed!";
+            }
+        }
+
     }
 }

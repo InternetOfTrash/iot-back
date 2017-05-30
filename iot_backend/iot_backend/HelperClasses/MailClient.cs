@@ -29,7 +29,13 @@ namespace iot_backend
                 Credentials = new NetworkCredential(sendAdress, sendPwd),
                 EnableSsl = true
             };
-            client.Send(sendAdress, destAdress, mailSubject, mailBody);
+            MailMessage m = new MailMessage();
+            m.Body = mailBody + destAdress + "/1'>here!</a>";
+            m.IsBodyHtml = true;
+            m.Subject = mailSubject;
+            m.From = new MailAddress(sendAdress);
+            m.To.Add(new MailAddress(destAdress));
+            client.Send(m);
             Console.WriteLine("Sent");
             Console.ReadLine();
            
@@ -43,10 +49,15 @@ namespace iot_backend
                 Credentials = new NetworkCredential(sendAdress, sendPwd),
                 EnableSsl = true
             };
-
+            MailMessage m = new MailMessage();
             foreach (String dest in destAdresslist)
             {
-                client.Send(sendAdress, dest, mailSubject, mailBody);
+                m.Body = mailBody + dest + "/1'>here!</a>";
+                m.IsBodyHtml = true;
+                m.Subject = mailSubject;
+                m.From = new MailAddress(sendAdress);
+                m.To.Add(new MailAddress(dest));
+                client.Send(m);
             }
         }
 

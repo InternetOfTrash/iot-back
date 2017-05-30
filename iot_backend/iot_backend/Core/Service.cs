@@ -158,6 +158,27 @@ namespace iot_backend
 
                 tran.Commit();
             }
+        }
+
+        internal void UnsubscribeToUsergroup(string id, string email)
+        {
+            List<string> usergroup;
+            using (var tran = engine.GetTransaction())
+            {
+                var rows = tran.Select<string, DbXML<List<string>>>("usergroups", id);
+                if (rows.Exists)
+                {
+                    usergroup = rows.Value.Get;
+                }
+                else
+                {
+                    usergroup = new List<string>();
+                }
+                usergroup.Remove(email);
+                tran.Insert<string, DbXML<List<string>>>("usergroups", id, usergroup);
+
+                tran.Commit();
+            }
 
 
         }
@@ -279,13 +300,13 @@ namespace iot_backend
                 if (message.Length == 0)
                 {
                     message = "Dear user,\n\nThe garbage container at " + ReverseGeo.GetInstance().GetAddressFromCoords(lat, longi) + " is nearly full!\n\n\n"+
-                        "This Mail was automatically sent because this email address is subscribed to the container at: " + ReverseGeo.GetInstance().GetAddressFromCoords(lat, longi) + ".";
+                        "This Mail was automatically sent because this email address is subscribed to the container at: " + ReverseGeo.GetInstance().GetAddressFromCoords(lat, longi) + ".  If you would like to unsubscribe simply click <a href='http://localhost:11001/containers/unsubscribe/" + ID + "/";
                 }
                 mailClient.sendMailToList(x, "A container you subscribed to is nearly full",message);
                 SetSent(ID, true);
                 Console.WriteLine("email sent");
             }
-
+             
         }
 
         public List<string> GetUserGroup(string id)
