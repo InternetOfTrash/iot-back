@@ -265,20 +265,27 @@ namespace iot_backend
             
         }
 
-        private void SendMail(string ID)
+        public void SendMail(string ID)
         {
-            
+            Console.WriteLine("method called");
             var x = GetUserGroup(ID); //insert into m.Schats code
+
             Container con = GetContainer(ID);
-            string lat = con.Latitude.ToString();
-            string longi = con.Longitude.ToString();
-            string message = "Container at " + ReverseGeo.GetInstance().GetAddressFromCoords(lat, longi);
-            if (message.Length == 0)
+            if (con != null)
             {
-                message = "A container you subscribed to";
+                string lat = con.Latitude.ToString();
+                string longi = con.Longitude.ToString();
+                String message = "";
+                if (message.Length == 0)
+                {
+                    message = "Dear user,\n\nThe garbage container at " + ReverseGeo.GetInstance().GetAddressFromCoords(lat, longi) + " is nearly full!\n\n\n"+
+                        "This Mail was automatically sent because this email address is subscribed to the container at: " + ReverseGeo.GetInstance().GetAddressFromCoords(lat, longi) + ".";
+                }
+                mailClient.sendMailToList(x, "A container you subscribed to is nearly full",message);
+                SetSent(ID, true);
+                Console.WriteLine("email sent");
             }
-            mailClient.sendMailToList(x, message + " is Full!", message + " is Full!");
-            SetSent(ID, true);
+
         }
 
         public List<string> GetUserGroup(string id)
