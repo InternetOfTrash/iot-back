@@ -105,8 +105,13 @@ namespace iot_backend
         {
             lat = lat.Replace(".", ",");
             lng = lng.Replace(".", ",");
+
             List<Container> containerList = new List<Container>();
             var sCoord = new GeoCoordinate(Convert.ToDouble(lat), Convert.ToDouble(lng));
+            if (!(sCoord.Latitude > -90 && sCoord.Latitude < 90) && (sCoord.Longitude > -180 & sCoord.Longitude < 180))
+            {
+                return new List<Container>();
+            }
             using (var transaction = engine.GetTransaction())
             {
                 Dictionary<string, DbXML<Container>> containers = transaction.SelectDictionary<string, DbXML<Container>>("containers");
@@ -300,7 +305,7 @@ namespace iot_backend
                 if (message.Length == 0)
                 {
                     message = "Dear user,\n\nThe garbage container at " + ReverseGeo.GetInstance().GetAddressFromCoords(lat, longi) + " is nearly full!\n\n\n"+
-                        "This Mail was automatically sent because this email address is subscribed to the container at: " + ReverseGeo.GetInstance().GetAddressFromCoords(lat, longi) + ".  If you would like to unsubscribe simply click <a href='http://localhost:11001/containers/unsubscribe/" + ID + "/";
+                        "This Mail was automatically sent because this email address is subscribed to the container at: " + ReverseGeo.GetInstance().GetAddressFromCoords(lat, longi) + ".  If you would like to unsubscribe simply click <a href='http://http://80.115.47.244:11001/containers/unsubscribe/" + ID + "/";
                 }
                 mailClient.sendMailToList(x, "A container you subscribed to is nearly full",message);
                 SetSent(ID, true);

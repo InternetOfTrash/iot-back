@@ -66,7 +66,7 @@ namespace iot_backend.Controllers
             try
             {
                 
-                if (id.Length != 0)
+                if (id.Length != 0 && (lat > -90 && lat < 90) && (lng > -180 & lng < 180) )
                 {
                     
                     if (ModelState.IsValid)
